@@ -1,26 +1,33 @@
 //@version=4
 study("Enhanced Moving Average Crossover", shorttitle="EMA Crossover", overlay=true)
 
+// Input for short and long moving averages
 shortMA = input(12, title="Short Moving Average", type=input.integer)
 longMA = input(26, title="Long Moving Average", type=input.integer)
 
+// Input for stop loss and take profit
 stopLoss = input(1, title="Stop Loss (%)", type=input.float)/100
 takeProfit = input(2, title="Take Profit (%)", type=input.float)/100
 
+// Calculate moving averages
 shortEMA = ema(close, shortMA)
 longEMA = ema(close, longMA)
 
+// Plot moving averages on the chart
 plot(shortEMA, title="Short Moving Average", color=color.blue, linewidth=2)
 plot(longEMA, title="Long Moving Average", color=color.red, linewidth=2)
 
+// Generate buy, sell, short and end short signals
 crossOver = crossover(shortEMA, longEMA)
 crossUnder = crossunder(shortEMA, longEMA)
 
-plotshape(crossOver, title="Buy", location=location.belowbar, color=color.green, style=shape.triangleup, text="Buy", offset=-2)
-plotshape(crossUnder, title="Sell", location=location.abovebar, color=color.red, style=shape.triangledown, text="Sell", offset=2)
-plotshape(crossUnder, title="Short", location=location.abovebar, color=color.orange, style=shape.triangledown, text="Short", offset=4)
-plotshape(crossOver, title="End Short", location=location.belowbar, color=color.purple, style=shape.triangleup, text="End Short", offset=-4)
+// Plot buy, sell, short and end short signals on the chart with offset
+plotshape(crossOver, title="Buy", location=location.belowbar, color=color.green, style=shape.triangleup, text="Buy", offset=-1)
+plotshape(crossUnder, title="Sell", location=location.abovebar, color=color.red, style=shape.triangledown, text="Sell", offset=1)
+plotshape(crossUnder, title="Short", location=location.abovebar, color=color.orange, style=shape.triangledown, text="Short", offset=2)
+plotshape(crossOver, title="End Short", location=location.belowbar, color=color.purple, style=shape.triangleup, text="End Short", offset=-2)
 
+// Create alerts for buy, sell, short and end short signals
 alertcondition(crossOver, title="Buy Alert", message="Buy Signal: EMA Crossover")
 alertcondition(crossUnder, title="Sell Alert", message="Sell Signal: EMA Crossunder")
 alertcondition(crossUnder, title="Short Alert", message="Short Signal: EMA Crossunder")
